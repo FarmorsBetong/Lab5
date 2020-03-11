@@ -1,8 +1,8 @@
 /*
- * Lab5.c
+ * lab5.c
  *
- * Created: 2020-03-09 18:24:47
- * Author : Robin
+ * Created: 2020-03-10 17:52:46
+ * Author : Emil
  */ 
 
 #include <avr/io.h>
