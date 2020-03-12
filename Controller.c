@@ -24,6 +24,7 @@ void dataReceieved(Controller *self, uint8_t data)
 	else if(((data >> 2) & 1) == 1)
 	{
 		self->southQueue++;
+		ASYNC(self,trafficLight,data);
 	}
 	else if(((data >> 3) & 1) == 1)
 	{
@@ -31,6 +32,7 @@ void dataReceieved(Controller *self, uint8_t data)
 		{
 			self->southQueue--;
 		}
+		ASYNC(self,trafficLight,data);
 	}
 	
 }
@@ -38,4 +40,9 @@ void dataReceieved(Controller *self, uint8_t data)
 void trafficLight(Controller *self , uint8_t data)
 {
 	if()
+}
+
+void dataTransmit(Controller *self, uint8_t data)
+{
+	
 }
