@@ -14,6 +14,7 @@ typedef struct {
 	Object super;
 	int NorthQueue;
 	int southQueue;
+	int bridge;
 }Controller;
 
 #define initController() {initObject(),0,0}
@@ -21,6 +22,8 @@ typedef struct {
 //Methods
 
 void dataReceieved(Controller *self);
+void dataTransmit(Controller *self);
+void trafficLight(Controller *self);
 
 
 
