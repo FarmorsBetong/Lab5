@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Lab5.c
  *
@@ -25,4 +26,3 @@ int main(void)
 	
 	return TINYTIMBER(&lcd,updateLCD,0); // print and give tinytimber the control and wait for interrupt.
 }
-
