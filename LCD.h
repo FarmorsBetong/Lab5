@@ -15,7 +15,8 @@
 void writeChar(char ch, int i);
 void printAt(long num, int pos); 
 void init();
-void updateLCDNorth();
-void updateLCDSouth();
+void updateLCDNorth(int arg);
+void updateLCDSouth(int arg);
+void updateLCDBridge(int arg);
 
 #endif /* LCD_H_ */

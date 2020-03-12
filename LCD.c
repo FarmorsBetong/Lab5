@@ -160,3 +160,12 @@ void updateLCDNorth(int arg)
 {
 	printAt(arg,0);
 }
+
+void updateLCDSouth(int arg)
+{
+	printAt(arg,4);
+}
+void updateLCDBridge(int arg)
+{
+	printAt(arg,2);
+}

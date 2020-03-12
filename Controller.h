@@ -17,13 +17,13 @@ typedef struct {
 	int bridge;
 }Controller;
 
-#define initController() {initObject(),0,0}
+#define initController() {initObject(),0,0,0}
 	
 //Methods
 
-void dataReceieved(Controller *self);
-void dataTransmit(Controller *self);
-void trafficLight(Controller *self);
+void dataReceieved(Controller *self, uint8_t data);
+void dataTransmit(Controller *self, uint8_t data);
+void trafficLight(Controller *self, uint8_t data);
 
 
 
