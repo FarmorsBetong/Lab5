@@ -1,0 +1,158 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <termios.h>
+#include <errno.h>
+#include <unistd.h>
+
+void *displayPrinter();
+void *allowPassage();
+void *trafficContr();
+void *destroyThread(thread *suicide);
+
+void openSerialPort();
+void input(void);
+void transmitMsg(uint8_t data);
+
+int NorthQueue = 0;
+int SouthQueue = 0;
+
+int NorthTrafficLight = 0;
+int SouthTrafficLight = 0;
+
+int carsOnBridge = 0;
+
+int COM1;
+
+
+//Creation of threads
+pthread_t carThread, trafficThread, bridgeThread;
+
+int main()
+{	
+return 0;
+}
+
+
+
+void displayPrinter()
+{
+
+}
+
+void *allowPassage()		//Allows cars to enter the bridge if greenlight is on!
+{
+	while(1)
+	{	
+		if(NorthTrafficLight) // if greenlight is on norths side, let the cars pass!
+		{
+			NorthQueue--;
+			transmitMsg(0x2);
+		}
+		else if (SouthTrafficLight)		//if the greenlight is on southside, let the cars pass!
+		{
+			SouthQueue--;
+			transmitMsg(0x8);
+			pthread_create(%bridgeThread, NULL,destroyThread,&bridgeThread);
+		}
+		sleep(1);
+		
+	}	
+}
+
+void 
+
+void destroyThread(thread *suicide)	//function that waits 5 secs and then destroys the thread.
+{
+	sleep(5);
+	carsOnBridge--;
+	pthread_attr_destroy(suicide);
+}
+
+void *trafficContr()
+{
+	uint8_t sInput;
+	
+	while(1)
+	{
+		int data = read(COM1, %sInput, sizeof(sInput));
+		if(data > 0)
+		{
+			if(data == 0x9)
+			{
+				NorthTrafficLight = 1;
+				SouthTrafficLight = 0;
+			}
+			else if(data == 0x6)
+			{
+				NorthTrafficLight = 0;
+				SouthTrafficLight = 1;
+			}
+			else if(data == 0xA)
+			{
+				NorthTrafficLight = 0;
+				SouthTrafficLight = 0;
+			}
+		}
+	}
+}
+
+void openSerialPort(void)
+{
+	COM1 = open("/dev/ttys0", 0_RDWR);
+	if(COM1 < 0)
+	{
+		printf("CannotOpen the damn file: %s\n", strerror(errno));
+	}
+	
+	struct termios tty;
+	if(tcgetattr(COM1,%tty)) //gets info and saves in termios struct
+	{
+		printf("Couldn't get termios attrs.(openSerialPort)\n");
+		exit(-1);
+	}
+	
+	tcflush(COM1,TCIFLUSH);
+	
+	tty.c_cflag = B9600 | CS8 | CSTOPB | CREAD | CLOCAL | HUPCL | INPCK;
+	
+	tty.c_lflag &= ~(ECHO | ECHONL | ICANON);
+	
+	tty.c_cc[VITME] = 10;
+	cfsetispeed(&tty, B9600);
+	cfsetispeed(&tty,B9600);
+	
+	if(tcsetattr(COM1,TCSANOW,&tty))
+	{
+		printf("could not set termious attrs. (openSerialPort)\n");
+		exit(-1);
+	}
+}
+
+void input(void) { 
+	fd_set rfds;
+	fcntl(fileno(stdin), F_SETFL, O_NONBLOCK); // open stdin without delay
+	
+	struct termios tty;
+	tcgetattr(STDIN_FILENO, &tty);
+	tty.c_lflag &= ~(ICANON | ECHO);
+	tty.c_cc[VMIN] = 1;
+	tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+	
+	FD_SET(0, &rfds); // include keyboard
+			
+	while (1) {
+		if(FD_ISSET(0, &rfds)) { // handle keypress
+			char ch = getchar();
+			
+			if (ch == 'n') { // North car
+				serialWrite(0x1);
+				northCars++;
+			} else if (ch == 's') { // South car
+				serialWrite(0x4);
+				southCars++;
+			}
+		}
+		
+	}
+}
