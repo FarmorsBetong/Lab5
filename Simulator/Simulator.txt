@@ -120,7 +120,7 @@ void openSerialPort(void)
 	
 	tty.c_cc[VITME] = 10;
 	cfsetispeed(&tty, B9600);
-	cfsetispeed(&tty,B9600);
+	cfsetospeed(&tty, B9600);
 	
 	if(tcsetattr(COM1,TCSANOW,&tty))
 	{
@@ -153,6 +153,5 @@ void input(void) {
 				southCars++;
 			}
 		}
-		
 	}
 }
